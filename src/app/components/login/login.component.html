@@ -1,0 +1,28 @@
+<div class="az-signin-wrapper mt-3 mb-3">
+  <div class="az-card-signin">
+    <h1 class="az-logo text-success">HB-NG</h1>
+    <div class="az-signin-header">
+      <h2>Welcome!</h2>
+      <h4>Please sign in to continue</h4>
+
+      <form #loginForm=ngForm (ngSubmit)="onSubmit()">
+        <div class="alert alert-danger" [hidden]="!error">
+          {{error}}
+        </div>
+        <div class="form-group">
+          <label>Username</label>
+          <input type="text" class="form-control" placeholder="Enter your email" id="inputEmail3" [(ngModel)] = "form.username" name="username" required>
+        </div><!-- form-group -->
+        <div class="form-group">
+          <label>Password</label>
+          <input type="password" class="form-control" placeholder="Enter your password" id="inputPassword3" [(ngModel)] = "form.password" name="password" required>
+        </div><!-- form-group -->
+        <button class="btn btn-success btn-block" type="submit" [disabled] = "!loginForm.valid">Sign In</button>
+      </form>
+    </div><!-- az-signin-header -->
+    <div class="az-signin-footer">
+      <a href="#">Forgot password?</a>
+    </div><!-- az-signin-footer -->
+  </div><!-- az-card-signin -->
+</div><!-- az-signin-wrapper -->
+

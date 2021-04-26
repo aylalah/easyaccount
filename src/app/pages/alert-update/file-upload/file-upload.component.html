@@ -1,0 +1,197 @@
+<div class="az-content-header">
+  <div class="az-content-header-top">
+    <div>
+      <h2 class="az-content-title mg-b-5 mg-b-lg-8">Alert Info Update</h2>
+      <p class="mg-b-0">File Upload.</p>
+    </div>
+    <div class="az-dashboard-date">
+      <div class="date">
+        <div class="float-right">
+          <button class="btn btn-dark btn-with-icon btn-block" (click)="open()"><i class="typcn typcn-plus"></i>Upload File Here</button>
+        </div>
+      </div><!-- az-dashboard-date -->
+    </div><!-- az-dashboard-date -->
+  </div><!-- az-content-body-title -->
+  <!-- <div class="nav-wrapper">
+    <nav class="nav az-nav-line">
+      <a href="javascript::void(0)" class="nav-link active">Single</a>
+      <a href="javascript::void(0)" class="nav-link">Bulk</a>
+    </nav>
+  </div> -->
+</div>
+
+
+<div class="az-content-body">
+  <div class="pd-10 pd-t-20 bg-gray-100">
+  <div class="row pd-b-10">
+    <div class="col-md-4">
+      <div class="az-content-label pt-3">Tatal Transaction: 0 / 0</div>
+    </div>
+
+    <div class="float-right col-md-8 mt-1">
+
+      <div class="az-header-center">
+
+        <input type="search" id="item_search" [(ngModel)]="search.accountNumber" class="form-control" placeholder="Search for Student...">
+        <button class="btn btn-primary" style="margin-right: 30px;" (click)="onSearch()"><i class="typcn typcn-zoom"></i></button>
+        <button class="btn btn-danger" (click)="onSearchCouncle()"><i class="typcn typcn-times"></i></button>
+
+      </div><!-- az-header-center -->
+    </div>
+  </div>
+
+  <nz-table #fixedTable
+            [nzData]="alertRecords"
+            [nzScroll]="{ x: '700px', y: '340px' }"
+            [nzLoading]="loading">
+    <thead>
+    <tr>
+      <th nzWidth="60px">S/N</th>
+      <th nzLeft>Account Number</th>
+      <th nzLeft>Email Address</th>
+      <th>Mobile Number</th>
+      <th nzRight>Action</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr *ngFor="let data of fixedTable.data; let r= index">
+      <td nzWidth="60px">{{ r+1 }}</td>
+      <td nzLeft>{{ data.accountnumber }}</td>
+      <td>{{ data.emailaddress }}</td>
+      <td>{{ data.mobilenumber }}</td>
+      <td nzRight>
+        <div class="btn-icon-list">
+          <button class="btn btn-info btn-icon"><i class="typcn typcn-eye"></i></button>
+          <button class="btn btn-danger btn-icon" (click)="onDeleteRow( data.accountnumber,  data.mobilenumber,  data.emailaddress)"><i class="typcn typcn-trash"></i></button>
+        </div>
+      </td>
+    </tr>
+    </tbody>
+  </nz-table>
+
+</div>
+
+
+  <nz-drawer
+    [nzBodyStyle]="{ overflow: 'auto' }"
+    [nzMaskClosable]="false"
+    [nzWidth]="920"
+    [nzVisible]="visible"
+    nzTitle="Create"
+    [nzFooter]="footerTpl"
+    (nzOnClose)="close()"
+  >
+
+
+  <div class="steps-content" *ngIf="index == 'Create-Alert'">
+
+    <div class="az-content-label mg-b-5">Update Alert Profile</div>
+    <p class="mg-b-20">File Upload.</p>
+
+    <div class="pd-30 pd-sm-40 bg-gray-200">
+      <div class="row row-xs align-items-center mg-b-20">
+        <div class="col-md-4">
+          <label class="form-label mg-b-0">Account Option</label>
+        </div><!-- col -->
+        <div class="col-md-8 mg-t-5 mg-md-t-0">
+          <input type="text" class="form-control" value="File Upload" disabled>
+        </div><!-- col -->
+      </div><!-- row -->
+
+      <div class="row row-xs align-items-center mg-b-20">
+        <div class="col-md-4">
+          <label class="form-label mg-b-0" value="">Upload File</label>
+        </div><!-- col -->
+        <div class="col-md-6 mg-t-5 mg-md-t-0">
+          <div class="custom-file">
+            <input type="file" class="custom-file-input" id="customFile" name="myfile"
+                   (change)="onFileSelect($event)" #UploadFileInput>
+            <label class="custom-file-label" for="customFile">{{fileInputLabel || 'Choose File'}}</label>
+          </div>
+        </div><!-- col -->
+      </div><!-- row -->
+
+
+      <!-- <button class="btn btn-dark pd-x-30">Cancel</button> -->
+    </div>
+  </div>
+
+    <div class="steps-content" *ngIf="index == 'View-details'">
+
+      <div class="az-content-label mg-b-5">View Details</div>
+    <p class="mg-b-20">A form control layout using row with left label alignment.</p>
+
+    <div class="pd-30 pd-sm-40 bg-gray-200">
+
+          <div class="row row-xs align-items-center mg-b-20">
+            <div class="col-md-4">
+              <label class="form-label mg-b-0"></label>
+            </div><!-- col -->
+            <div class="col-md-6 mg-t-5 mg-md-t-0">
+
+              <div class="alert alert-danger" [hidden]="!error">
+                {{error}}
+              </div>
+              <div class="alert alert-success" [hidden]="!success">
+                {{success}}
+              </div>
+            </div><!-- col -->
+          </div><!-- row -->
+
+            <div class="row pd-b-10">
+              <div class="col-md-4">
+                <div class="az-content-label pt-3">Tatal Transaction: 0 / 0</div>
+              </div>
+
+              <div class="float-right col-md-8 mt-1">
+
+                <div class="az-header-center">
+
+
+                </div><!-- az-header-center -->
+              </div>
+            </div>
+
+            <nz-table #fixedTable
+                      [nzData]="alertRecords"
+                      [nzScroll]="{ x: '700px', y: '340px' }"
+                      [nzLoading]="loading">
+              <thead>
+              <tr>
+                <th nzWidth="60px">S/N</th>
+                <th nzLeft>Account Number</th>
+                <th nzLeft>Email Address</th>
+                <th>Mobile Number</th>
+                <th nzRight>Action</th>
+              </tr>
+              </thead>
+              <tbody>
+              <tr *ngFor="let data of fixedTable.data; let r= index">
+                <td nzWidth="60px">{{ r+1 }}</td>
+                <td nzLeft>{{ data.accountnumber }}</td>
+                <td>{{ data.emailaddress }}</td>
+                <td>{{ data.mobilenumber }}</td>
+                <td nzRight>
+                  <div class="btn-icon-list">
+                    <button class="btn btn-info btn-icon"><i class="typcn typcn-eye"></i></button>
+                    <button class="btn btn-danger btn-icon" (click)="onDeleteRow( data.accountnumber,  data.mobilenumber,  data.emailaddress)"><i class="typcn typcn-trash"></i></button>
+                  </div>
+                </td>
+              </tr>
+              </tbody>
+            </nz-table>
+
+      </div>
+    </div>
+
+    <ng-template #footerTpl>
+      <div style="float: right">
+        <button class="btn btn-dark pd-x-30" style="margin-right: 8px;" (click)="close()">Close</button>
+        <button class="btn btn-success pd-x-30 mg-r-5" *ngIf="index == 'Create-Alert'" (click)="onSubmitSingle()">Register</button>
+        <button class="btn btn-az-primary pd-x-30 mg-r-5" *ngIf="index == 'View-details'" (click)="again()">Update Another</button>
+      </div>
+    </ng-template>
+  </nz-drawer>
+
+  <!-- </div> -->
+</div><!-- az-content-body -->

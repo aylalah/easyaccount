@@ -1,0 +1,312 @@
+<div class="az-content-header">
+  <div class="az-content-header-top">
+    <div>
+      <h2 class="az-content-title mg-b-5 mg-b-lg-8">New Account!</h2>
+        <p class="mg-b-0">Open various types of saving account.</p>
+    </div>
+    <div class="az-dashboard-date">
+      <div class="date">
+        <div class="float-right"  ><button class="btn btn-primary btn-with-icon btn-block" (click)="open('Create Customer')"><i class="typcn typcn-user-add"></i>Add Individual CIF</button></div>
+      </div>&nbsp;
+
+      <div class="date">
+        <button class="btn btn-warning btn-with-icon btn-block" (click)="open('Minor Account')" [routerLink]= "['/indevidual/pending',{outlets: {Savings: ['new-minor']}}]" routerLinkActive="active" ><i class="typcn typcn-plus"></i>Minor</button>
+        <!-- <button  nz-button nzType="default" [routerLink]= "['/new-customer']">Create Customer</button> -->
+      </div>&nbsp;
+      <!-- <i class="icon ion-md-arrow-forward"></i> -->
+      <div class="date">
+        <button class="btn btn-info btn-with-icon btn-block" (click)="open('Joint Account')" [routerLink]= "['/indevidual/pending',{outlets: {Savings: ['new-bulk']}}]" routerLinkActive="active"><i class="typcn typcn-plus"></i>Joint </button>
+        <!-- <button nz-button nzType="primary" [routerLink]="['/indevidual',{outlets: {Savings: ['new-minor']}}]">Create Account</button> -->
+      </div> &nbsp;
+      <div class="date">
+          <button (click)="open('Normal Account')" [routerLink]= "['/indevidual/pending',{outlets: {Savings: ['new-normal']}}]" routerLinkActive="active" class="btn btn-success btn-with-icon btn-block"><i class="typcn typcn-plus"></i>Individual</button>
+      </div>
+    </div><!-- az-dashboard-date -->
+  </div><!-- az-content-body-title -->
+
+  <div class="nav-wrapper">
+    <!-- <nav class="nav az-nav-line">
+      <a href="javascript::void(0)" (click)="tab(0)" *ngIf="currenttab == 0" class="nav-link active">Pending Account</a>
+      <a href="javascript::void(0)" (click)="tab(0)" *ngIf="currenttab != 0" class="nav-link">Pending Account</a>
+      <a href="javascript::void(0)" (click)="tab(1)" *ngIf="currenttab == 1" class="nav-link active">Authorized Account</a>
+      <a href="javascript::void(0)" (click)="tab(1)" *ngIf="currenttab != 1" class="nav-link">Authorized Account</a>
+    </nav> -->
+    <nav class="nav az-nav-line" >
+      <a href="javascript::void(0)"  [routerLink]= "['/indevidual', 'pending']" routerLinkActive="active"  class="nav-link">Pending</a>
+      <a href="javascript::void(0)"  [routerLink]= "['/indevidual', 'approved']" routerLinkActive="active"  class="nav-link">Approved</a>
+      <a href="javascript::void(0)"  [routerLink]= "['/indevidual', 'rejected']" routerLinkActive="active"  class="nav-link">Rejected</a>
+    </nav>
+  </div>
+</div>
+
+
+<div class="az-content-body">
+
+  <!-- <button nz-button nzType="primary" >New Cookbook</button> -->
+  <nz-drawer
+  [nzBodyStyle]="{ overflow: 'auto' }"
+  [nzMaskClosable]="false"
+  [nzWidth]="920"
+  [nzVisible]="visible"
+  nzTitle="{{ tabName }}"
+  [nzFooter]="footerTpl"
+  (nzOnClose)="close()"
+>
+    <router-outlet name='Savings' *ngIf="tabName != 'Create Customer'"></router-outlet>
+
+    <app-new-customer *ngIf="tabName == 'Create Customer'"></app-new-customer>
+
+    <ng-template #footerTpl></ng-template>
+  </nz-drawer>
+
+  <div class="pd-10 pd-t-20 bg-gray-100" *ngIf="indextab == 'First-content'">
+    <div class="row pd-b-10">
+      <div class="col-md-4">
+        <div class="az-content-label pt-3">Total Pending Account: {{ 1 }} / {{ this.individualAccountCount }}</div>
+      </div>
+
+      <div class="float-right col-md-8 mt-1">
+
+      </div>
+    </div>
+
+    <nz-table #fixedTable
+              [nzData]="individualAccount"
+              [nzScroll]="{ x: '700px', y: '440px' }"
+              [nzLoading]="loading">
+      <thead>
+      <tr>
+        <th nzWidth="60px">#</th>
+        <th nzLeft>Request Type</th>
+        <th nzLeft>Customer Name</th>
+        <th>email</th>
+        <th>Scheme Code</th>
+        <th>Scheme Type</th>
+        <th>Requested By</th>
+        <th nzRight>Action</th>
+      </tr>
+      </thead>
+      <tbody id="item">
+      <tr *ngFor="let data of fixedTable.data; let r= index">
+        <td nzWidth="60px">{{ r+1 }}</td>
+        <td nzLeft>{{data.request_type}}</td>
+        <td nzLeft *ngIf="data.name !== ''">{{data.name}}</td> <td nzLeft *ngIf="data.name == ''"> - </td>
+        <td *ngIf="data.email !== ''">{{data.email}}</td> <td *ngIf="data.email == ''"> - </td>
+        <td *ngIf="data.scheme_code !== ''">{{data.scheme_code}}</td> <td *ngIf="data.scheme_code == ''"> - </td>
+        <td *ngIf="data.scheme_type !== ''">{{data.scheme_type}}</td> <td *ngIf="data.scheme_type == ''"> - </td>
+        <th *ngIf="data.requested_by !== ''">{{data.requested_by}}</th> <th *ngIf="data.requested_by == ''"> - </th>
+        <td nzRight>
+            <div class="btn-icon-list az-content-label az-content-label-sm mg-b-10">
+              <button class="btn btn-warning btn-icon" type="button" (click)="viewOpen(data.id)"><i class="typcn typcn-eye"></i></button>
+            </div>
+      </tr>
+      </tbody>
+    </nz-table>
+  </div>
+
+
+
+  <div class="pd-10 pd-t-20 bg-gray-100" *ngIf="indextab == 'Second-content'">
+    <div class="row pd-b-10">
+      <div class="col-md-4">
+        <div class="az-content-label pt-3">Total Approved Account: {{ 1 }} / {{ this.accountOpeningsCount }}</div>
+      </div>
+
+      <div class="float-right col-md-8 mt-1">
+
+      </div>
+    </div>
+
+      <nz-table #fixedTable
+                [nzData]="accountOpenings"
+                [nzScroll]="{ x: '700px', y: '490px' }"
+                [nzLoading]="loading">
+        <thead>
+        <tr>
+          <th nzWidth="60px">S/N</th>
+          <th nzLeft>Request Type</th>
+          <th nzLeft>Customer Name</th>
+          <th>Customer ID</th>
+          <th>Account Number</th>
+          <th>Scheme Code</th>
+          <th>Scheme Type</th>
+          <th nzRight>Action</th>
+        </tr>
+        </thead>
+        <tbody id="item">
+        <tr *ngFor="let data of fixedTable.data; let r= index">
+          <td nzWidth="60px">{{ r+1 }}</td>
+          <td nzLeft>{{data.request_type}}</td>
+          <td *ngIf="data.name !== ''">{{data.name}}</td> <td nzLeft *ngIf="data.name == ''"> - </td>
+          <th *ngIf="data.customer_id !== ''">{{data.customer_id}}</th> <th *ngIf="data.customer_id == ''"> - </th>
+          <th *ngIf="data.account_number !== ''">{{ data.account_number}}</th>  <th *ngIf="data.account_number == ''"> - </th>
+          <td *ngIf="data.scheme_code !== ''">{{data.scheme_code}}</td> <td *ngIf="data.scheme_code == ''"> - </td>
+          <td *ngIf="data.scheme_type !== ''">{{data.scheme_type}}</td> <td *ngIf="data.scheme_type == ''"> - </td>
+          <td nzRight>
+            <div class="btn-icon-list az-content-label az-content-label-sm mg-b-10">
+              <button class="btn btn-info btn-icon" type="button" (click)="viewOpen(data.id)"><i class="typcn typcn-eye"></i></button>
+            </div>
+          </td>
+        </tr>
+        </tbody>
+      </nz-table>
+    <!-- </div> -->
+   </div>
+
+   <div class="pd-10 pd-t-20 bg-gray-100" *ngIf="indextab == 'third-content'">
+    <div class="row pd-b-10">
+      <div class="col-md-4">
+        <div class="az-content-label pt-3">Total Approved Account: {{ 1 }} / {{ this.RejectedInquiryCount }}</div>
+      </div>
+
+      <div class="float-right col-md-8 mt-1">
+
+      </div>
+    </div>
+
+      <nz-table #fixedTable
+                [nzData]="RejectedInquiry"
+                [nzScroll]="{ x: '700px', y: '490px' }"
+                [nzLoading]="loading">
+        <thead>
+        <tr>
+          <th nzWidth="60px">S/N</th>
+          <th nzLeft>Request Type</th>
+          <th nzLeft>Customer Name</th>
+          <th>Customer ID</th>
+          <th>Account Number</th>
+          <th>Scheme Code</th>
+          <th>Scheme Type</th>
+          <th nzRight>Action</th>
+        </tr>
+        </thead>
+        <tbody id="item">
+        <tr *ngFor="let data of fixedTable.data; let r= index">
+          <td nzWidth="60px">{{ r+1 }}</td>
+          <td nzLeft>{{data.request_type}}</td>
+          <td *ngIf="data.name !== ''">{{data.name}}</td> <td nzLeft *ngIf="data.name == ''"> - </td>
+          <th *ngIf="data.customer_id !== ''">{{data.customer_id}}</th> <th *ngIf="data.customer_id == ''"> - </th>
+          <th *ngIf="data.account_number !== ''">{{ data.account_number}}</th>  <th *ngIf="data.account_number == ''"> - </th>
+          <td *ngIf="data.scheme_code !== ''">{{data.scheme_code}}</td> <td *ngIf="data.scheme_code == ''"> - </td>
+          <td *ngIf="data.scheme_type !== ''">{{data.scheme_type}}</td> <td *ngIf="data.scheme_type == ''"> - </td>
+          <td nzRight>
+            <div class="btn-icon-list az-content-label az-content-label-sm mg-b-10">
+              <button class="btn btn-dark btn-icon" type="button" (click)="viewOpen(data.id)"><i class="typcn typcn-eye"></i></button>
+            </div>
+          </td>
+        </tr>
+        </tbody>
+      </nz-table>
+    <!-- </div> -->
+
+   </div>
+
+</div><!-- az-content-body -->
+
+
+
+
+<nz-drawer [nzBodyStyle]="{ overflow: 'auto' }" [nzMaskClosable]="false"  [nzFooter]="footerTpl2" [nzClosable]="false" [nzOffsetX]="childrenVisible ? 180 : 0" [nzWidth]="640" [nzVisible]="viewVisible" nzTitle="Cookbook" (nzOnClose)="viewClose()">
+
+  <ng-container *nzDrawerContent >
+    <ngx-ui-loader [loaderId]="'loader-01'" [fgsColor]= "'#02A51D'"></ngx-ui-loader>
+    <p class="title" style=" margin-bottom: 24px;"><b>User Profile</b></p>
+    <nz-descriptions [nzColumn]="2" nzTitle="Customer Personal Information" *ngIf="inquiryAccountOp">
+      <nz-descriptions-item nzTitle="Salutation" [nzSpan]="1">{{ inquiryAccountOp.salutation }}</nz-descriptions-item>
+      <nz-descriptions-item nzTitle="Full Name" [nzSpan]="1">{{ inquiryAccountOp.name }} {{ inquiryAccountOp.middle_name }}</nz-descriptions-item>
+      <nz-descriptions-item nzTitle="Email" [nzSpan]="1">{{ inquiryAccountOp.email }}</nz-descriptions-item>
+      <nz-descriptions-item nzTitle="Address" [nzSpan]="1">{{ inquiryAccountOp.address }}</nz-descriptions-item>
+      <nz-descriptions-item nzTitle="Age" [nzSpan]="1">{{ inquiryAccountOp.age }}</nz-descriptions-item>
+      <nz-descriptions-item nzTitle="Birthday" [nzSpan]="1">{{ inquiryAccountOp.date_of_birth }}</nz-descriptions-item>
+      <nz-descriptions-item nzTitle="BVN" [nzSpan]="1">{{ inquiryAccountOp.bvn }}</nz-descriptions-item>
+      <nz-descriptions-item nzTitle="Customer Id" [nzSpan]="1">{{ inquiryAccountOp.customer_id }}</nz-descriptions-item>
+      <nz-descriptions-item nzTitle="Gender" [nzSpan]="1" *ngIf="inquiryAccountOp.gender == 'M'">Male</nz-descriptions-item>
+      <nz-descriptions-item nzTitle="Gender" [nzSpan]="1" *ngIf="inquiryAccountOp.gender == 'F'">Female</nz-descriptions-item>
+      <nz-descriptions-item nzTitle="Phone Number" [nzSpan]="1">{{ inquiryAccountOp.phone_number }}</nz-descriptions-item>
+      <nz-descriptions-item nzTitle="Comment" [nzSpan]="1">{{ inquiryAccountOp.comment }}</nz-descriptions-item>
+      <nz-descriptions-item nzTitle="Parent cif" [nzSpan]="1">{{ inquiryAccountOp.parent_cif }}</nz-descriptions-item>
+    </nz-descriptions>
+    <nz-divider></nz-divider>
+    <nz-descriptions [nzColumn]="2" nzTitle="Account Details" *ngIf="inquiryAccountOp">
+      <nz-descriptions-item nzTitle="Account Number" [nzSpan]="1">{{ inquiryAccountOp.account_number }}</nz-descriptions-item>
+      <nz-descriptions-item nzTitle="Account Creation Id" [nzSpan]="1">{{ inquiryAccountOp.account_creation_id }}</nz-descriptions-item>
+      <nz-descriptions-item nzTitle="App Id" [nzSpan]="1">{{ inquiryAccountOp.app_id }}</nz-descriptions-item>
+      <nz-descriptions-item nzTitle="Card Request" [nzSpan]="1">{{ inquiryAccountOp.card_request }}</nz-descriptions-item>
+      <nz-descriptions-item nzTitle="Card Type" [nzSpan]="1">{{ inquiryAccountOp.card_type }}</nz-descriptions-item>
+      <nz-descriptions-item nzTitle="Enable Alert" [nzSpan]="1">{{ inquiryAccountOp.enable_alert }}</nz-descriptions-item>
+      <nz-descriptions-item nzTitle="Scheme Code" [nzSpan]="1">{{ inquiryAccountOp.scheme_code }}</nz-descriptions-item>
+      <nz-descriptions-item nzTitle="Scheme Type" [nzSpan]="1">{{ inquiryAccountOp.scheme_type }}</nz-descriptions-item>
+      <nz-descriptions-item nzTitle="Sector" [nzSpan]="1">{{ inquiryAccountOp.sector }}</nz-descriptions-item>
+      <nz-descriptions-item nzTitle="Limit Amount" [nzSpan]="2">{{ inquiryAccountOp.limit_amount }}</nz-descriptions-item>
+      <nz-descriptions-item nzTitle="Gl Sub Head Code" [nzSpan]="1">{{ inquiryAccountOp.gl_sub_head_code }}</nz-descriptions-item>
+      <nz-descriptions-item nzTitle="Manager" [nzSpan]="1">{{ inquiryAccountOp.manager }}</nz-descriptions-item>
+    </nz-descriptions>
+    <nz-divider></nz-divider>
+    <nz-descriptions [nzColumn]="2" nzTitle="Internal" *ngIf="inquiryAccountOp">
+      <nz-descriptions-item nzTitle="Introducer Code" [nzSpan]="1">{{ inquiryAccountOp.introducer_code }}</nz-descriptions-item>
+      <nz-descriptions-item nzTitle="Request Type" [nzSpan]="1">{{ inquiryAccountOp.request_type }}</nz-descriptions-item>
+      <nz-descriptions-item nzTitle="Requested By" [nzSpan]="1">{{ inquiryAccountOp.requested_by }}</nz-descriptions-item>
+      <nz-descriptions-item nzTitle="Approved By" [nzSpan]="1">{{ inquiryAccountOp.approved_by }}</nz-descriptions-item>
+    </nz-descriptions>
+  </ng-container>
+
+  <ng-template #footerTpl2>
+    <div style="float: right">
+      <button class="btn btn-dark pd-x-30 mg-r-5" (click)="viewClose()">Close</button>
+      <button class="btn btn-warning pd-x-30 mg-r-5" *ngIf="indextab == 'First-content'" (click)="openChildren()">Descision</button>
+      <button class="btn btn-warning pd-x-30 mg-r-5" *ngIf="indextab == 'third-content'">Update</button>
+    </div>
+  </ng-template>
+
+  <nz-drawer [nzClosable]="false" [nzWidth]="640"  [nzFooter]="footerTpl3"  [nzVisible]="childrenVisible" nzTitle="Descision" (nzOnClose)="closeChildren()">
+        <!-- <nz-list-item [nzContent]="item"></nz-list-item> -->
+            <div class="pd-30 pd-sm-40 bg-gray-200">
+
+              <div class="alert alert-solid-warning" role="alert">
+                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                  <span aria-hidden="true">&times;</span>
+                </button>
+                <strong>Kindly select action for your descision!</strong> <br> and give reason for your action.
+              </div><!-- alert -->
+
+                <div class="row row-xs align-items-center mg-b-20">
+                  <div class="col-md-4">
+                    <label class="form-label mg-t-20">Action</label>
+                  </div><!-- col -->
+                  <div class="col-md-8 mg-t-5 mg-md-t-0">
+
+                    <div class="row mg-t-10">
+                      <div class="col-md-4 mg-t-20">
+                        <label class="rdiobox">
+                          <input name="rdio" type="radio" checked (click)="onAction('approve')">
+                          <span>Approve</span>
+                        </label>
+                      </div><!-- col-3 -->
+                      <div class="col-md-4 mg-t-20">
+                        <label class="rdiobox">
+                          <input name="rdio" type="radio" (click)="onAction('reject')">
+                          <span>Reject</span>
+                        </label>
+                      </div><!-- col-3 -->
+                    </div><!-- row -->
+                  </div><!-- col -->
+                </div><!-- row -->
+
+              <div class="row row-xs align-items-center mg-b-20">
+                <div class="col-md-4 mg-t-20">
+                  <label class="form-label mg-b-0">Reason</label>
+                </div><!-- col -->
+                <div class="col-md-8 mg-t-20 mg-md-t-0">
+                  <textarea rows="3" class="form-control mg-t-20" placeholder="Student Description" name="comment" [(ngModel)]="approval.comment" required></textarea>
+                </div><!-- col -->
+              </div><!-- row -->
+            </div>
+          <ng-template #footerTpl3>
+            <div style="float: right">
+              <button class="btn btn-dark pd-x-30 mg-r-5" (click)="closeChildren()">Cancel</button>
+              <button class="btn btn-success pd-x-30 mg-r-5" (click)="submitApproval()">Submit</button>
+            </div>
+          </ng-template>
+  </nz-drawer>
+</nz-drawer>
+

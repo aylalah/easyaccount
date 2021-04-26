@@ -1,0 +1,50 @@
+{
+  "$schema": "./node_modules/@angular/service-worker/config/schema.json",
+  "index": "/index.html",
+  "assetsGroups":[
+    {
+      "name": "api-freshness",
+      "urls": [
+        "/eWallet/api/v1/session/authenticated-user"
+      ],
+      "cacheConfig" : {
+        "strategy": "freshness",
+        "maxSize": 100,
+        "maxAge": "3d",
+        "timeout": "5s"
+      }
+    }],
+  "assetGroups": [
+    {
+      "name": "Essay-account",
+      "installMode": "prefetch",
+      "resources": {
+        "files": [
+          "/favicon.ico",
+          "/index.html",
+          "/manifest.webmanifest",
+          "/*.css",
+          "/*.js",
+          "/assets/**",
+          "/app/*.ts",
+          "/app/*.html",
+          "/app/*.css",
+          "/app/components/login/*.css",
+          "/app/components/login/*.html",
+          "/app/components/login/*.ts"
+        ]
+      }
+    },
+    {
+      "name": "assets",
+      "installMode": "lazy",
+      "updateMode": "prefetch",
+      "resources": {
+        "files": [
+          "/assets/**",
+          "/*.(eot|svg|cur|jpg|png|webp|gif|otf|ttf|woff|woff2|ani)"
+        ]
+      }
+    }
+  ]
+}
